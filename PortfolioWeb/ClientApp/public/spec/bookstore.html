@@ -1,0 +1,36 @@
+﻿/*
+I have a chain of bookstores and I need software to manage bookstore inventory and shelving.
+Each bookstore should have a name and a unique numeric code for quick reference,
+that also allows for us to have two bookstores with the same name.
+You don't need to record any location information about the bookstore we have a separate system for that
+and will use the bookstore code in the other system.
+A book has an author, title, year published, ISBN.
+Each store has shelves, each shelf has a numerical sequence number.
+The system should be able to record and report which books are on which shelves.
+Some shelves have a mix of books, a shelf can have multiple copies of one book.
+Books and shelves can have one or more categories. That allows us to keep similar books on a shelf.
+*/
+
+--1) Schema Sketch, create the tables
+--2) populate the tables with (at least 3) bookstores, authors, books (some authors should have multiple books), and (at least 4) shelves
+--3) for all stores
+	--a) populate one shelf with all books
+	--b) populate one shelf with multiple copies of one book
+	--c) populate one shelf with all books from one author
+	--d) designate two shelves for a particular category and populate it with books from the matching category
+
+--4) add a shelf to store 1 and populate with all books from authors with a particualar letter in their name
+
+--5) new author wrote new book, put it on shelf 1 of all stores besides for store 1
+
+--6) store 3 is closing delete it and all it's records
+
+--7) show me a list of stores, shelves, and books (include author's name) sorted by store, author, title, shelf number
+
+--8) show me a list of stores and count of books per shelf
+
+--9) show me a list of stores and a count of books per store
+
+--10) show me a list of authors and how many books they have in my stores
+
+--11) show me the number of books per store per category*/

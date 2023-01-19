@@ -1,0 +1,197 @@
+﻿--AS Amazing job!! 100%
+use RecipeDB
+go
+
+drop table if exists CookbookRecipe
+drop table if exists Cookbook
+drop table if exists MealCourseRecipe
+drop table if exists MealCourse
+drop table if exists Meal
+drop table if exists Course
+drop table if exists Steps
+drop table if exists RecipeIngredient
+drop table if exists Recipe
+drop table if exists Cuisine
+drop table if exists MeasurementType
+drop table if exists Ingredient
+drop table if exists CreatedByUser
+
+create table dbo.CreatedByUser(
+CreatedByUserId int not null identity primary key,
+FirstName varchar(50) not null
+    constraint ck_CreatedByUser_FirstName_cannot_be_blank check(FirstName <> ''),
+LastName varchar(50) not null
+    constraint ck_CreatedByUser_LastName_cannot_be_blank check(LastName <> ''),
+CreatedByUserPassword varchar(10) not null
+    constraint ck_CreatedByUser_CreatedByUserPassword_cannot_be_blank check(CreatedByUserPassword <> ''),
+constraint u_CreatedByUser_FirstName_LastName_CreatedByUserPassword unique(FirstName, LastName, CreatedByUserPassword)
+)
+go
+alter table CreatedByUser drop column if exists UserName
+go
+alter TABLE CreatedByUser add UserName as CONCAT(FirstName,' ', LastName)
+go
+
+
+create table dbo.Ingredient(
+IngredientId int not null identity primary key,
+IngredientName varchar(40) not null
+    constraint ck_Ingredient_IngredientName_cannot_be_blank check(IngredientName <> '')
+    constraint u_Ingredient_IngredientName unique
+)
+go
+
+create table dbo.MeasurementType(
+MeasurementTypeId int not null identity primary key,
+MeasurementName varchar(50) not null
+    constraint ck_MeasurementType_MeasurementName_cannot_be_blank check(MeasurementName <> '')
+    constraint u_MeasurementType_MeasurementName unique
+)
+go
+
+create table dbo.Cuisine(
+CuisineId int not null identity primary key,
+CuisineName varchar(50) not null
+    constraint ck_Cuisine_CuisineName_cannot_be_blank check(CuisineName <> '')
+    constraint u_Cuisine_CuisineName unique
+)
+go
+
+
+
+create table dbo.Recipe(
+RecipeId int not null identity primary key,
+CreatedByUserId int not null
+    constraint f_CreatedByUser_Recipe foreign key references CreatedByUser(CreatedByUserId),
+CuisineId int not null
+    constraint f_Cuisine_Recipe foreign key references Cuisine(CuisineId),
+Num int not null constraint u_Recipe_Num unique
+                 constraint ck_Recipe_Num_must_be_greater_than_zero check(Num > 0),
+RecipeName varchar(100) not null
+    constraint ck_Recipe_RecipeName_cannot_be_blank check(RecipeName <> '')
+    constraint u_Recipe_RecipeName unique,
+Calories int not null
+    constraint ck_Recipe_Calories_must_be_greater_than_zero check(Calories > 0),
+DraftDate date not null default getdate()
+    constraint ck_Recipe_DraftDate_must_be_between_January_1_2022_and_current_date check(DraftDate between '01/01/2022' and getdate()),
+PublishedDate date null,
+ArchivedDate date null,
+StatusName as case
+                --when ArchivedDate is not null then 'Archived'
+                when ArchivedDate is not null and PublishedDate is not null then 'Published'--not ever true for sloppy joe since ArchivedDate is ALREWADY not null
+               -- when ArchivedDate is not null and PublishedDate is not null then 'Published'--not ever true for sloppy joe since ArchivedDate is ALREWADY not null
+                when ArchivedDate is not null and PublishedDate is null then 'Archived'
+                else 'Draft'
+              end,
+constraint ck_Recipe_ArchivedDate_must_after_DraftDate check(ArchivedDate > DraftDate),
+constraint ck_Recipe_PublishedDate_must_be_between_DraftDate_and_current_date check(PublishedDate between DraftDate and getdate()),
+constraint ck_Recipe_ArchivedDate_must_be_between_PublishedDate_and_current_date check(ArchivedDate between PublishedDate and getdate())
+)
+go
+
+alter table recipe drop column if exists Code
+go
+alter TABLE Recipe add Code as Replace(CONCAT(Num, '-',replace(RecipeName, '''','')), ' ', '-')
+go
+
+
+
+create table dbo.RecipeIngredient(
+RecipeIngredientId int not null identity primary key,
+RecipeId int not null
+    constraint f_Recipe_RecipeIngredient foreign key references Recipe(RecipeId),
+IngredientId int not null
+    constraint f_Ingredient_RecipeIngredient foreign key references Ingredient(IngredientId),
+MeasurementTypeId int not null
+    constraint f_MeasurementType_RecipeIngredient foreign key references MeasurementType(MeasurementTypeId),
+Quantity decimal(5,2) not null
+    constraint ck_RecipeIngredient_Quantity_must_be_greater_than_zero check(Quantity > 0),
+Seq int not null
+    constraint ck_RecipeIngredient_Seq_must_be_greater_than_zero check(Seq > 0),
+constraint u_Recipe_Ingredient_RecipeIngredient unique(RecipeId, IngredientId)
+)
+go
+
+create table dbo.Steps(
+StepsId int not null identity primary key,
+RecipeId int not null
+    constraint f_Recipe_Steps foreign key references Recipe(RecipeId),
+Seq int not null
+    constraint ck_Steps_Seq_must_be_greater_than_zero check(Seq > 0),
+StepDesc varchar(1000)
+    constraint ck_Steps_StepDesc_cannot_be_blank check(StepDesc <> ''),
+constraint u_Steps_Recipe_Seq unique(RecipeId, Seq)
+)
+go
+
+create table dbo.Course(
+CourseId int not null identity primary key,
+CourseName varchar(30) not null
+    constraint ck_Course_CourseName_cannot_be_blank check(CourseName <> '')
+    constraint u_Course_CourseName unique,
+Seq int not null
+    constraint ck_Course_Seq_must_be_greater_than_zero check(Seq > 0)
+)
+go
+
+create table dbo.Meal(
+MealId int not null identity primary key,
+CreatedByUserId int not null
+    constraint f_CreatedByUser_Meal foreign key references CreatedByUser(CreatedByUserId),
+MealTitle varchar(50) not null
+    constraint ck_Meal_MealTitle_cannot_be_blank check(MealTitle <> '')
+    constraint u_Meal_MealTitle unique,
+DateCreated date not null default getdate()
+    constraint Meal_DateCreated_must_be_between_01_01_2022_and_current_date check(DateCreated between '1/1/2022' and getdate()),
+Active bit not null default 1
+)
+go
+
+create table dbo.MealCourse(
+MealCourseId int not null identity primary key,
+MealId int not null
+    constraint f_Meal_MealCourse foreign key references Meal(MealId),
+CourseId int not null
+    constraint f_Course_MealCourse foreign key references Course(CourseId),
+constraint u_Meal_Course_MealCourse unique(MealId, CourseId)
+)
+go
+
+create table dbo.MealCourseRecipe(
+MealCourseRecipeId int not null identity primary key,
+MealCourseId int not null
+    constraint f_MealCourse_MealCourseRecipe foreign key references MealCourse(MealCourseId),
+RecipeId int not null
+    constraint f_Recipe_MealCourseRecipe foreign key references Recipe(RecipeId),
+MainDish bit not null,
+constraint u_MealCourse_Recipe_MealCourseRecipe unique(MealCourseId, RecipeId)
+)
+go
+
+create table dbo.Cookbook(
+CookbookId int not null identity primary key,
+CreatedByUserId int not null
+    constraint f_CreatedByUser_Cookbook foreign key references CreatedByUser(CreatedByUserId),
+CookbookTitle varchar (150) not null
+    constraint ck_Cookbook_CookbookTitle_cannot_be_blank check(CookbookTitle <> '')
+    constraint u_Cookbook_CookbookTitle unique,
+Price decimal(5,2) not null
+    constraint ck_Cookbook_CookbookTitle_must_greater_than_zero check(Price > 0),
+DateCreated date not null default getdate()
+    constraint ck_Cookbook_DateCreated_must_be_between_01_01_2022_and_current_date check(DateCreated between '1/1/2022' and getdate()),
+Active bit not null default 1
+)
+go
+
+create table dbo.CookbookRecipe(
+CookbookRecipeId int not null identity primary key,
+RecipeId int not null
+    constraint f_Recipe_CookbookRecipe foreign key references Recipe(RecipeId),
+CookbookId int not null
+    constraint f_Cookbook_CookbookRecipe foreign key references Cookbook(CookbookId),
+Seq int not null
+    constraint f_CookbookRecipe_Seq_must_greater_than_zero check(Seq > 0),
+constraint u_Cookbook_Recipe_CookbookRecipe unique(CookbookId, RecipeId)
+)
+go
+

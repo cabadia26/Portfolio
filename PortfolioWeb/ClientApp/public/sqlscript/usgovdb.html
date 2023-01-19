@@ -1,0 +1,76 @@
+﻿use RecordKeeperDB
+go
+
+
+drop table if exists ExecutiveOrder
+drop table if exists president
+drop table if exists Party
+
+go
+
+
+
+create table dbo.Party(
+    PartyId int not null identity primary key,
+    PartyName varchar(25) constraint ck_Party_PartyName_cannot_be_blank check(PartyName <> '')
+                          constraint u_Party_PartyName_must_be_unique unique,
+    YearStarted int not null constraint ck_Party_YearStarted_must_be_greater_than_zero check(YearStarted > 0),
+    Color varchar(10) not null constraint ck_Party_Color_cannot_be_blank check(Color <> '')
+)
+go
+
+
+
+create table dbo.president(
+        PresidentId int not null identity (1000,1) primary key,
+        PartyId int not null constraint f_Party_President foreign key references Party(PartyId),
+		Num int not null constraint u_President_Num unique
+                 constraint ck_President_Num_must_be_greater_than_zero check(Num > 0),
+		FirstName varchar(100) not null constraint ck_President_FirstName_cannot_be_blank check(FirstName <> ''),
+		LastName varchar(100) not null constraint ck_President_LastName_cannot_be_blank check(LastName <> ''),
+		DateBorn date not null,
+		DateDied datetime2,
+		YearBorn as datepart(year,DateBorn),
+		YearDied as datepart(year,DateDied),
+		TermStart int not null constraint ck_Termstart_must_be_1789_or_greater check(TermStart>= 1789),
+		TermEnd int,
+	constraint ck_President_TermEnd_cannot_be_before_TermStart check(TermEnd >= TermStart),
+	constraint ck_President_President_Age_must_be_thirtyfive_years_or_older check(TermStart - year(dateBorn) >= 35)
+)
+go
+
+
+alter table president drop column if exists Code
+go
+alter table president add Code as replace(CONCAT(Num, '-', FirstName, '-', LastName),' ','-') PERSISTED
+GO
+
+alter table president drop column if exists AgeAtDeath
+alter table president add AgeAtDeath as year(DateDied) - year(DateBorn) persisted
+
+alter table president drop column if exists YearsServed
+alter table president add YearsServed as TermEnd - TermStart persisted
+
+
+alter table President drop column if exists NumberofFullTermServed
+alter table President add  NumberofFullTermServed as
+    case TermEnd - TermStart
+        when 4 then 1
+        when 8 then 2
+        when 12 then 3
+        else 0
+        end
+
+create table dbo.ExecutiveOrder(
+    ExecutiveOrderId int not null identity primary key,
+	PresidentId int not null constraint f_ExecutiveOrder_President foreign key references President(PresidentId),
+    OrderNum int not null constraint u_ExecutiveOrder_OrderNumber unique,
+                          constraint ck_ExecutiveOrder_OrderNum_must_greater_than_zero check(OrderNum > 0),
+	PageNum int not null constraint ck_ExecutiveOrder_PageNum_cannot_be_blank check(PageNum <> ''),
+    YearOrdered int constraint ck_ExecutiveOrder_YearOrdered_must_be_greater_than_zero_and_not_in_future check(YearOrdered between 1 and year(getdate())),
+	OrderName varchar(100) constraint ck_ExecutiveOrder_OrderName_cannot_be_blank check(OrderName <> ''),
+	OfficialFormat as concat('Exec. Order No. ', OrderNum,' ',' 3 C.F.R. ', PageNum,' ', YearOrdered,'. ', OrderName) persisted,
+    CourtUpheld bit not null,
+    DateOrderInserted date not null default getdate()
+)
+go
