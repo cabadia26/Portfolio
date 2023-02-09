@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { GetDevSubsectionElements } from './utility';
 import { SQLScript } from './SQLScript';
 import { DevTool } from './DevTool';
+
+
 export function DevSubsection(props) {
     const subsection = props.subsection;
     const [activetab, setActiveTab] = useState(1);
@@ -40,7 +42,7 @@ export function DevSubsection(props) {
             </div>
             <div className="row">
                 <div className="col-md-12">
-                    <hr/>
+                    <hr />
                     <DevTool toolType="" subsectionCode={code} />
                     <hr />
                 </div>
@@ -71,12 +73,41 @@ export function DevSubsection(props) {
 }
 function GetSubElement(e) {
     const fileurl = "/" + e.devSubsectionElementCode + "/" + e.devSubsectionCode + e.fileExtension;
+
     switch (e.htmlTag) {
         case "img":
             return <img src={fileurl} />;
             break;
         case "iframe":
             return <SQLScript dirpath={fileurl} />
+            break;
+        case "video":
+            const subsectionvideo = require("./video/" + e.devSubsectionCode + ".mp4");
+            return (
+                <video key={e.devSubsectionCode} width="618" height="574" loop autoPlay muted>
+                    <source src={subsectionvideo} type="video/mp4" />
+                    Sorry, your browser does not support the video tag.
+                </video>
+
+                //return (
+                //    <video key={e.devSubsectionCode}  loop autoPlay muted>
+                //        <source src={fileurl} type="video/mp4" />
+                //            Sorry, your browser does not support the video tag.
+                //    </video>
+            )
+            break;
+        case "zip":
+            return (
+                <div>
+                    <div> To install click download, extract zip file too computer, open the folder and double-click setup.exe</div>
+                    <a href={fileurl}> Download</a>
+                </div>
+            )
+            break;
+        case "a":
+            return (
+                <a href= {e.url}target='_new'>Click here to see website</a>
+                )
             break;
     }
 }
