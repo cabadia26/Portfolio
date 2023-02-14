@@ -21,7 +21,8 @@ namespace PortfolioBizObjects
         public string DevSubsectionName { get; set; } = "";
         public string DevSubsectionDesc { get; set; } = "";
         public string GitHubRepoName { get; set; } = "";
-     
+        public string URL { get; set; } = "";
+
         public int DevSubsectionSequence { get; set; } = 0;
 
         public static List<bizDevSubsection> Search(string criteria)

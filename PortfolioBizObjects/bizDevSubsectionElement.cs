@@ -16,7 +16,7 @@ namespace PortfolioBizObjects
         public string ButtonText { get; set; } = "";
         public string HtmlTag { get; set; } = "";
         public string FileExtension { get; set; } = "";
-        
+        public string URL { get; set; } = "";
         public int DevSubsectionElementSequence { get; set; }
     }
 }

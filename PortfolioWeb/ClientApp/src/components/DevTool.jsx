@@ -24,7 +24,7 @@ export function DevTool(props) {
     return (
         <ul className="list-group list-group-horizontal">
             <li className="list-group-item devtoolheader">{caption}</li>
-            {tools.map(t => <li className="list-group-item text-bg-light">{GetTool(t)}</li>)}
+            {tools.map(t => <li key={t.devToolCode} className="list-group-item text-bg-light">{GetTool(t)}</li>)}
         </ul>
     )
 }

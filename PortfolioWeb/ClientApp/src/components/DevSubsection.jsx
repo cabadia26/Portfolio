@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { GetDevSubsectionElements } from './utility';
 import { SQLScript } from './SQLScript';
 import { DevTool } from './DevTool';
-
+import { TrySQL } from './TrySQL';
 
 export function DevSubsection(props) {
     const subsection = props.subsection;
@@ -74,6 +74,8 @@ export function DevSubsection(props) {
 function GetSubElement(e) {
     const fileurl = "/" + e.devSubsectionElementCode + "/" + e.devSubsectionCode + e.fileExtension;
 
+    console.log("e",e);
+
     switch (e.htmlTag) {
         case "img":
             return <img src={fileurl} />;
@@ -88,12 +90,6 @@ function GetSubElement(e) {
                     <source src={subsectionvideo} type="video/mp4" />
                     Sorry, your browser does not support the video tag.
                 </video>
-
-                //return (
-                //    <video key={e.devSubsectionCode}  loop autoPlay muted>
-                //        <source src={fileurl} type="video/mp4" />
-                //            Sorry, your browser does not support the video tag.
-                //    </video>
             )
             break;
         case "zip":
@@ -107,6 +103,11 @@ function GetSubElement(e) {
         case "a":
             return (
                 <a href= {e.url}target='_new'>Click here to see website</a>
+                )
+            break;
+        case "trysql":
+            return (
+                <TrySQL dbname={e.devSubsectionCode }/>
                 )
             break;
     }
