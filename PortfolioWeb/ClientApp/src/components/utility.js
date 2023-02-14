@@ -35,6 +35,11 @@ export async function GetDevToolType() {
     const t = await FetchFromAPI("devtooltypes")
     return t;
 }
+export async function GetDataTable(dbname, sql) {
+    
+    const t = await FetchFromAPI("trysql?dbname=" + dbname + "&sql=" + sql)
+    return t;
+}
 
 async function FetchFromAPI(apiurl) {
     const resp = await fetch(baseurl + apiurl);

@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CPUFramework;
+using Microsoft.AspNetCore.Mvc;
 using PortfolioBizObjects;
+using System.Data;
+using Newtonsoft.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -58,6 +61,13 @@ namespace PortfolioWeb.Controllers
 
             List<bizDevTool> lst = bizDevTool.GetList("DevSubsectionCode", DevSubsectionCode);
             return lst;
+        }
+        [HttpGet("trysql")]
+        public IActionResult TrySQL(string dbname, string sql)
+        {
+            string connstring = DataUtility.ConnectionString;
+            DataTable dt = SQLUtility.GetDataTable(connstring, sql);
+            return Ok(JsonConvert.SerializeObject(dt));
         }
     }
 }
