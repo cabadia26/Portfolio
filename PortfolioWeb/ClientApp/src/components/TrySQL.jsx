@@ -32,7 +32,10 @@ export function TrySQL(props) {
                 <div className="col-md-12">
                     <table className="table">
                         <tbody>
-                            <tr>{Object.keys(results[0]).map(col => <th>{col }</th>) }</tr>
+                            <tr>{Object.keys(results[0]).map(col => <th>{col}</th>)}</tr>
+                            {results.map(item => <tr>
+                                {Object.values(item).map(value => <td>{value}</td>)}
+                            </tr>)}
                         </tbody>
                     </table>
                 </div>
