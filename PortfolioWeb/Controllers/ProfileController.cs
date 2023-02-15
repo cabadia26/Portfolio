@@ -69,17 +69,24 @@ namespace PortfolioWeb.Controllers
 
             connstring = connstring.Replace("PortfolioDB", dbname);
 
-            DataTable dt = SQLUtility.GetDataTable(connstring, sql);
-            if(dt.Rows.Count == 0)
+            try
             {
-                foreach(DataColumn c in dt.Columns)
+                DataTable dt = SQLUtility.GetDataTable(connstring, sql);
+                if (dt.Rows.Count == 0)
                 {
-                    c.AllowDBNull = true;
+                    foreach (DataColumn c in dt.Columns)
+                    {
+                        c.AllowDBNull = true;
+                    }
+                    dt.Rows.Add();
                 }
-                dt.Rows.Add();
-            }
 
-            return Ok(JsonConvert.SerializeObject(dt));
+                return Ok(JsonConvert.SerializeObject(dt));
+            }
+            catch(Exception ex)
+            {
+                return Ok(new {errormsg=ex.Message});
+            }
         }
     }
 }

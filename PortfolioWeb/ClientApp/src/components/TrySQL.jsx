@@ -4,6 +4,7 @@ import { GetDataTable } from './utility'
 export function TrySQL(props) {
     const dbname = props.dbname;
     const [results, setResults] = useState([]);
+    const [errormsg, setErrormsg] = useState("");
     const [sql, setSql] = useState("");
     const txtsql = useRef(null);
     useEffect(() => {
@@ -11,7 +12,18 @@ export function TrySQL(props) {
             async () => {
                 if (sql != "") {
                     const resultsobj = await GetDataTable(dbname, sql);
+
+                    if (Object.hasOwn(resultsobj, "errormsg")) {
+                        setErrormsg(resultsobj.errormsg);
+                        setResults(null);
+                    }
+                    else {
+                        setResults(resultsobj);
+                        setErrormsg("");
+                    }
+
                     setResults(resultsobj);
+
                 }
             }
         )();
@@ -22,7 +34,7 @@ export function TrySQL(props) {
         <div>
             <div className="row">
                 <div className="col-md-12">
-                    <textarea ref={txtsql}  cols="100" rows="4"/>
+                    <textarea className="trysqlcode" ref={txtsql}  cols="100" rows="4"/>
                 </div>
             </div>
             <div className="row">
@@ -30,11 +42,12 @@ export function TrySQL(props) {
                     <button className="btn-btn-success" onClick={() => setSql(txtsql.current.value)}>Run SQL</button>
                 </div>
             </div>
-            <div className="row">
+            <div className="row my-4">
+                <div className="h3 bg-danger">{errormsg}</div>
             </div> 
             <div className="row">
                 <div className="col-md-12">
-                    { (results.length > 0) ?
+                    { (results != null && results.length > 0) ?
                         <table className="table">
                             <tbody>
                                 <tr>{Object.keys(results[0]).map((col, index) => <th key={index}>{col}</th>)}</tr>

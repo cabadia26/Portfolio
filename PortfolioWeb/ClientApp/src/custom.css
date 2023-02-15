@@ -3,6 +3,12 @@ a {
   color: #0366d6;
 }
 
+.trysqlcode {
+    color: darkblue;
+    font-family: Consolas;
+    font-size:x-large;
+}
+
 .code {
     border: 1px solid lightgray;
     padding:20px;
