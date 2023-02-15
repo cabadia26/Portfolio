@@ -67,6 +67,15 @@ namespace PortfolioWeb.Controllers
         {
             string connstring = DataUtility.ConnectionString;
             DataTable dt = SQLUtility.GetDataTable(connstring, sql);
+            if(dt.Rows.Count == 0)
+            {
+                foreach(DataColumn c in dt.Columns)
+                {
+                    c.AllowDBNull = true;
+                }
+                dt.Rows.Add();
+            }
+
             return Ok(JsonConvert.SerializeObject(dt));
         }
     }

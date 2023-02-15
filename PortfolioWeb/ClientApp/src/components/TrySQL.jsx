@@ -7,7 +7,7 @@ export function TrySQL(props) {
     useEffect(() => {
         (
             async () => {
-                const resultsobj = await GetDataTable(dbname, "select * from devtool");
+                const resultsobj = await GetDataTable(dbname, "select * from devsection where devsectionid = 0 ");
                 setResults(resultsobj);
             }
         )();
