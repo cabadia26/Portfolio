@@ -12,7 +12,7 @@ export function TrySQL(props) {
             }
         )();
     }, []);
-    if (results == []) { return <p>Loading...</p> }
+    if (results.length == 0) { return <p>Loading...</p> }
     console.log(results);
     return (
         <div>
@@ -30,10 +30,13 @@ export function TrySQL(props) {
             </div> 
             <div className="row">
                 <div className="col-md-12">
+                    <table className="table">
+                        <tbody>
+                            <tr>{Object.keys(results[0]).map(col => <th>{col }</th>) }</tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-
-
         </div>
     )
 
