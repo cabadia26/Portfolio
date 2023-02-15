@@ -107,7 +107,7 @@ function GetSubElement(e) {
             break;
         case "trysql":
             return (
-                <TrySQL dbname={e.devSubsectionCode }/>
+                <TrySQL key={e.devSubsectionCode} dbname={e.devSubsectionCode }/>
                 )
             break;
     }
