@@ -66,6 +66,9 @@ namespace PortfolioWeb.Controllers
         public IActionResult TrySQL(string dbname, string sql)
         {
             string connstring = DataUtility.ConnectionString;
+
+            connstring = connstring.Replace("PortfolioDB", dbname);
+
             DataTable dt = SQLUtility.GetDataTable(connstring, sql);
             if(dt.Rows.Count == 0)
             {
