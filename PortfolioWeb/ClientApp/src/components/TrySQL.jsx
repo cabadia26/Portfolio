@@ -1,10 +1,11 @@
-﻿import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect, useRef } from 'react';
 import { GetDataTable } from './utility'
 
 export function TrySQL(props) {
     const dbname = props.dbname;
     const [results, setResults] = useState([]);
     const [sql, setSql] = useState("");
+    const txtsql = useRef(null);
     useEffect(() => {
         (
             async () => {
@@ -21,12 +22,12 @@ export function TrySQL(props) {
         <div>
             <div className="row">
                 <div className="col-md-12">
-                    <textarea cols="100" rows="4"/>
+                    <textarea ref={txtsql}  cols="100" rows="4"/>
                 </div>
             </div>
             <div className="row">
                 <div className="col-md-3">
-                    <button className="btn-btn-success" onClick={() => setSql("select * from devsubsection")}>Run SQL</button>
+                    <button className="btn-btn-success" onClick={() => setSql(txtsql.current.value)}>Run SQL</button>
                 </div>
             </div>
             <div className="row">
