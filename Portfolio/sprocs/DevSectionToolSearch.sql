@@ -15,4 +15,6 @@ begin
 end
 go 
 
+grant execute on DevSectionToolSearch to portfolio_role
+
 exec DevSectionToolSearch @SearchCriteria = 'HTML'

@@ -27,4 +27,7 @@ return @return
 end 
 go 
 
+
+grant execute on DevSubsectionGet to portfolio_role
+
 exec DevSubsectionGet @All = 1

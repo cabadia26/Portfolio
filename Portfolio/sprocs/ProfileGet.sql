@@ -18,5 +18,7 @@ begin
 end 
 go 
 
+grant execute on ProfileGet to portfolio_role
+
 exec ProfileGet
 exec ProfileGet @All =1

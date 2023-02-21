@@ -48,3 +48,6 @@ finished:
     return @return 
  end
 go 
+
+
+grant execute on ProfileUpdate to portfolio_role

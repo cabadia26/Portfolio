@@ -11,3 +11,5 @@ end
 
 
 go 
+
+grant execute on ProfileDelete to portfolio_role

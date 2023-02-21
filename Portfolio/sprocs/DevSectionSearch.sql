@@ -11,4 +11,6 @@ begin
 end
 go 
 
+grant execute on DevSectionSearch to portfolio_role
+
 exec DevSectionSearch @SearchCriteria = 'Database Schema'

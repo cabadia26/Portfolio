@@ -23,5 +23,7 @@ end
 
 go 
 
+grant execute on DevSectionGet to portfolio_role
+
 exec DevSectionGet
 exec DevSectionGet @All =1

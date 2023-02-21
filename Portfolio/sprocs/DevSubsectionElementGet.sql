@@ -1,4 +1,4 @@
-create or alter proc dbo.DevSubsectionELementGet(
+create or alter proc dbo.DevSubsectionElementGet(
     @DevSubsectionElementId int = 0,
     @All bit = 0,
     @Message varchar(500) = '' output 
@@ -24,4 +24,6 @@ end
 
 go 
 
-exec DevSubsectionELementGet @All = 1
+grant execute on DevSubsectionElementGet to portfolio_role
+
+exec DevSubsectionElementGet @All = 1

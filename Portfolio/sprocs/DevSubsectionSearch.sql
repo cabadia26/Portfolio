@@ -11,4 +11,7 @@ begin
 end
 go 
 
+
+grant execute on DevSubsectionSearch to portfolio_role
+
 exec DevSubsectionSearch @SearchCriteria = 'bookstoredb'

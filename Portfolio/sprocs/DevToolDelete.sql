@@ -13,3 +13,5 @@ end
 
 
 go 
+
+grant execute on DevToolDelete to portfolio_role

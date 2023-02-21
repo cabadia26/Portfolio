@@ -24,4 +24,7 @@ return @return
 end 
 go 
 
+
+grant execute on DevSubsectionToolGet to portfolio_role
+
 exec DevSubsectionToolGet @All =1

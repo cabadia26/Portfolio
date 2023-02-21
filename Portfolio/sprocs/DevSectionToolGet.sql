@@ -26,4 +26,6 @@ begin
 end 
 go 
 
+grant execute on DevSectionToolGet to portfolio_role
+
 exec DevSectionToolGet

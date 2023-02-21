@@ -43,6 +43,8 @@ begin
 end
 go
 
+
+grant execute on DevToolGet to portfolio_role
 exec DevToolGet @All = 1
 
 exec DevToolGet @All = 0, @DevSubsectionCode = 'recipeweb'

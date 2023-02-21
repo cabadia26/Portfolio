@@ -20,4 +20,6 @@ return @return
 end 
 go 
 
+grant execute on DevToolTypeGet to portfolio_role
+
 exec DevToolTypeGet @All = 1

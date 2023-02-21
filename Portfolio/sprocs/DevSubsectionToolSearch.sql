@@ -13,4 +13,7 @@ begin
 end
 go 
 
+
+grant execute on DevSubsectionToolSearch to portfolio_role
+
 exec DevSubsectionToolSearch @SearchCriteria = 'Dapper'
