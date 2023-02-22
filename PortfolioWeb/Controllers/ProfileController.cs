@@ -62,6 +62,11 @@ namespace PortfolioWeb.Controllers
             List<bizDevTool> lst = bizDevTool.GetList("DevSubsectionCode", DevSubsectionCode);
             return lst;
         }
+        [HttpGet("devsubsectionqueries")]
+        public List<bizDevSubsectionQuery> DevSubsectionQueryGet()
+        {
+            return bizDevSubsectionQuery.GetAll();
+        }
         [HttpGet("trysql")]
         public IActionResult TrySQL(string dbname, string sql)
         {

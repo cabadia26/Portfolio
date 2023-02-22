@@ -1,7 +1,9 @@
 use PortfolioDB
 go 
 
+delete DevSubsectionQuery
 delete DevSubsectionTool
+delete DevSubsectionElement
 delete DevSubSection
 delete DevSectionTool
 delete DevSection
@@ -235,3 +237,13 @@ union select s.DevSubsectionId, t.DevToolId
 from DevSubsection s 
 cross join DevTool t 
 where s.DevSubsectionCode in ('portfolioweb' ,'usgovweb', 'recipeweb', 'tictactoeweb')  and t.DevtoolName in ('ASP.Net', 'C#', 'HTML', 'CSS', 'JavaScript', 'JQuery', 'React', 'Bootstrap', 'Cloud Computing using Microsoft Azure','Dapper')
+
+
+insert DevSubsectionQuery(DevSubsectionId, DevSubsectionQueryCaption, DevSubsectionQueryText, DevSubsectionQuerySequence) 
+select s.DevSubsectionId, 'Count of Presidents', 'select count(*) from president', 0 from DevSubsection s where s.DevSubsectionCode = 'RecordkeeperDB'
+union 
+select s.DevSubsectionId, 'List of Presidents', 'select * from president', 1 from DevSubsection s where s.DevSubsectionCode = 'RecordkeeperDB'
+union 
+select s.DevSubsectionId, 'Count of Developer Tools', 'select count(*) from devtool', 0 from DevSubsection s where s.DevSubsectionCode = 'PortfolioDB'
+union 
+select s.DevSubsectionId, 'List of Developer Tools', 'select * from devtool', 1 from DevSubsection s where s.DevSubsectionCode = 'PortfolioDB'

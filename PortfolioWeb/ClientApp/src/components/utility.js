@@ -35,6 +35,13 @@ export async function GetDevToolType() {
     const t = await FetchFromAPI("devtooltypes")
     return t;
 }
+
+//devsubsectionqueries
+export async function GetDevSubsectionQueries() {
+    return await FetchFromAPI("devsubsectionqueries")
+     
+}
+
 export async function GetDataTable(dbname, sql) {
     
     const t = await FetchFromAPI("trysql?dbname=" + dbname + "&sql=" + sql)

@@ -21,3 +21,4 @@ grant select on DevSubsectionTool to portfolio_role
 grant select on DevTool to portfolio_role 
 grant select on DevToolType to portfolio_role 
 grant select on Profile to portfolio_role 
+grant execute on DevSubsectionQuery to portfolio_role

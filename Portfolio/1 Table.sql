@@ -2,6 +2,7 @@
 use PortfolioDB
 go 
 
+drop table if exists DevSubsectionQuery
 drop table if exists DevSubsectionElement 
 drop table if exists DevSubSectionTool
 drop table if exists DevSubSection
@@ -132,3 +133,14 @@ create table dbo.DevSubsectionTool(
    constraint u_DevSubsectionTool_DevSubsection_DevTool unique(DevSubsectionId, DevToolId)
 )
 go
+
+
+create table dbo.DevSubsectionQuery(
+  DevSubsectionQueryId int not null identity primary key,
+  DevSubsectionId int not null 
+       constraint f_DevSubsection_DevSubsectionQuery foreign key references DevSubsection(DevSubsectionId),
+  DevSubsectionQueryCaption varchar(50) not null,
+  DevSubsectionQueryText varchar(1000) not null,
+  DevSubsectionQuerySequence int not null default 0,
+  constraint u_DevSubsectionQuery_DevSubsectionId_DevSubsectionQueryId unique(DevSubsectionId, DevSubsectionQueryId) 
+)

@@ -1,15 +1,30 @@
 ﻿import React, { useState, useEffect, useRef } from 'react';
 import { GetDataTable } from './utility'
+import { GetDevSubsectionQueries } from './utility'
 
 export function TrySQL(props) {
     const dbname = props.dbname;
     const [results, setResults] = useState([]);
+    const [queries, setQueries] = useState([]);
     const [errormsg, setErrormsg] = useState("");
     const [sql, setSql] = useState("");
     const txtsql = useRef(null);
+
+
     useEffect(() => {
         (
             async () => {
+
+                const queriesobj = await GetDevSubsectionQueries();
+                setQueries(queriesobj);
+                }
+        )();
+    }, []);
+
+    useEffect(() => {
+        (
+            async () => {
+
                 if (sql != "") {
                     const resultsobj = await GetDataTable(dbname, sql);
 
@@ -21,15 +36,16 @@ export function TrySQL(props) {
                         setResults(resultsobj);
                         setErrormsg("");
                     }
-
-                    setResults(resultsobj);
-
                 }
             }
         )();
     }, [sql]);
+
+    if (queries.length > 0) {
+        console.log(queriesobj);
+    }
    
-    console.log(results);
+    
     return (
         <div>
             <div className="row">
