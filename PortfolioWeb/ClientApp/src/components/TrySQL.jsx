@@ -6,10 +6,11 @@ export function TrySQL(props) {
     const dbname = props.dbname;
     const [results, setResults] = useState([]);
     const [queries, setQueries] = useState([]);
+    const [query, setQuery] = useState([]);
     const [errormsg, setErrormsg] = useState("");
     const [sql, setSql] = useState("");
     const txtsql = useRef(null);
-
+    const lstquery = useRef(null);
 
     useEffect(() => {
         (
@@ -41,16 +42,25 @@ export function TrySQL(props) {
         )();
     }, [sql]);
 
-    if (queries.length > 0) {
-        console.log(queriesobj);
-    }
-   
+   const qs = queries.filter(q => q.devSubsectionCode == dbname)
     
     return (
         <div>
+            <div className="row my-3">
+                <div className="col-md-5">
+                    {queries.length > 0 ?
+                        <select className="form-select" ref={lstquery} onChange={() => setQuery(lstquery.current.value)}>
+                            <option value="">select a query</option>
+                            {qs.map(q => <option key={q.devSubsectionQueryCaption} value={q.devSubsectionQueryText}>{q.devSubsectionQueryCaption}</option>)}
+                        </select>
+                        :
+                        null
+                    }
+                </div>
+                </div>
             <div className="row">
                 <div className="col-md-12">
-                    <textarea className="trysqlcode" ref={txtsql}  cols="100" rows="4"/>
+                    <textarea className="trysqlcode" ref={txtsql} cols="100" rows="4" defaultvalue={query}/>
                 </div>
             </div>
             <div className="row">
