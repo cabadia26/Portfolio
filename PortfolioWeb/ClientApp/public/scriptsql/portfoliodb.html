@@ -1,14 +1,12 @@
-﻿use PortfolioDB
+﻿
+use PortfolioDB
 go
 
-drop table if exists DevSubsectionQuery
-drop table if exists DevSubsectionElement
 drop table if exists DevSubSectionTool
 drop table if exists DevSubSection
 drop table if exists DevSectionTool
 drop table if exists DevSection
 drop table if exists DevTool
-drop table if exists DevToolType
 drop table if exists Profile
 
 
@@ -30,31 +28,12 @@ create table dbo.Profile(
 )
 go
 
-create table dbo.DevToolType(
-    DevToolTypeId int not null identity primary key,
-    DevToolTypeCode varchar(25) not null
-        constraint u_DevToolType_DevToolTypeCode unique,
-    DevToolTypeName varchar(100) not null
-        constraint u_DevToolType_Name unique,
-    DevToolTypeSequence int not null,
-    ShowOnHomePage bit not null
-)
-
-go
-
 create table dbo.DevTool(
     DevToolId int not null identity primary key,
-    DevToolTypeId int not null
-        constraint f_DevToolType_DevTool foreign key references DevToolType(DevToolTypeId),
-    DevToolCode as replace(replace(replace(lower(DevToolName),' ',''),'.',''),'#','')
-        constraint u_DevTool_DevToolCode unique,
     DevToolName varchar (45) not null
         constraint ck_DevTool_DevToolName_cannot_be_blank check(DevToolName <> '')
         constraint u_DevTool_DevToolName unique,
-    DevToolSequence int not null,
-    HasIcon bit not null default 0,
-    IconExt varchar (3) not null default 'svg'
-
+    DevToolSequence int not null
 )
 go
 
@@ -68,7 +47,7 @@ create table dbo.DevSection(
         constraint u_DevSection_DevSectionName unique,
     DevSectionOverview varchar (500) not null
         constraint ck_DevSection_DevSectionOverview_cannot_be_blank check(DevSectionOverview <> ''),
-    DevSectionBlurb  varchar (500) not null
+    DevSectionBlurb  varchar (250) not null
         constraint ck_DevSection_DevSectionBlurb_cannot_be_blank check(DevSectionBlurb <> ''),
     HasPicture bit not null default 1,
     DevSectionSequence int not null
@@ -98,28 +77,17 @@ create table dbo.DevSubsection(
     DevSubsectionDesc varchar (500) not null
         constraint ck_DevSubsection_DevSubsectionDesc_cannot_be_blank check(DevSubsectionDesc <> ''),
     GitHubRepoName varchar (25),
-    URL varchar (250) not null default '',
         --constraint u_DevSubsection_GitHubRepoName unique,
-    DevSubsectionSequence int not null default 0
-    constraint u_DevSubsectionId_DevSubsectionCode unique(DevSubsectionId, DevSubsectionCode)
-)
-go
-
-create table dbo.DevSubsectionElement(
-    DevSubsectionElementId int not null identity primary key,
-    DevSubsectionId int not null
-        constraint f_DevSubsection_DevSubsectionElement foreign key references DevSubsection(DevSubsectionId),
-    DevSubSectionElementCode varchar(25) not null
-        constraint ck_DevSubsectionElement_DevSubsectionElementCode_cannot_be_blank check(DevSubsectionElementCode <> ''),
-    ButtonText varchar(25) not null,
-        constraint ck_DevSubsectionElement_ButtonText_cannot_be_blank check(ButtonText <> ''),
-    HtmlTag varchar(10) not null,
-        constraint ck_DevSubsectionElement_HtmlTag_cannot_be_blank check(HtmlTag <> ''),
-    FileExtension varchar(5) not null ,
-        --constraint ck_DevSubsectionElement_FileExtention_cannot_be_blank check(FileExtension <> ''),
-    DevSubsectionElementPriority int not null default 0
-    constraint u_DevSubsectionElementId_DevSubSectionElementCode unique(DevSubsectionElementId, DevSubSectionElementCode)
-
+    HasIcon bit not null default 1,
+    HasPicture bit not null default 1,
+    HasVideo bit not null default 1,
+    HasSpec bit not null default 1,
+    HasWireframe bit not null default 1,
+    DevSubsectionSequence int not null
+--AS can be any number, you can set a section to negative 1 to put it first
+        constraint ck_DevSubsection_DevSubsectionSequence_must_be_greater_than_zero check(DevSubsectionSequence > 0)
+--AS The constraint should be on devsectionid not devsubsectionid
+        constraint u_DevSubsectionId_DevSubsectionCode unique(DevSubsectionId, DevSubsectionCode),
 )
 go
 
@@ -130,16 +98,5 @@ create table dbo.DevSubsectionTool(
    DevToolId int not null
        constraint f_DevTools_DevSubsectionTool foreign key references DevTool(DevToolId),
    constraint u_DevSubsectionTool_DevSubsection_DevTool unique(DevSubsectionId, DevToolId)
-)
-go
-
-create table dbo.DevSubsectionQuery(
-  DevSubsectionQueryId int not null identity primary key,
-  DevSubsectionId int not null
-       constraint f_DevSubsection_DevSubsectionQuery foreign key references DevSubsection(DevSubsectionId),
-  DevSubsectionQueryCaption varchar(50) not null,
-  DevSubsectionQueryText varchar(1000) not null,
-  DevSubsectionQuerySequence int not null default 0,
-  constraint u_DevSubsectionQuery_DevSubsectionId_DevSubsectionQueryId unique(DevSubsectionId, DevSubsectionQueryId)
 )
 go

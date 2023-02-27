@@ -18,25 +18,16 @@ namespace PortfolioUnitTest
         [SetUp]
         public void Setup()
         {
-            SetLocalConnectionString("Server=.\\SQLExpress;Initial Catalog=PortfolioDB;Trusted_Connection=yes;");
-            DataUtility.ConnectionString = connstring;
+            connstring = DataUtility.SetSQLExpressConnectionString("PortfolioDB");
 
             DataTable dt = SQLUtility.GetDataTable(connstring, "select top  1 p.ProfileId from profile p");
             maxproid = (int)dt.Rows[0]["profileid"];
 
 
-            //DataTable d = SQLUtility.GetDataTable(connstring, "select top 1 ds.DevSectionId from DevSubsection dst  join DevSection ds on ds.DevSectionId = dst.DevSectionId order by DevSectionSequence");
+            DataTable d = SQLUtility.GetDataTable(connstring, "select top 1 ds.DevSectionId from DevSubsection dst  join DevSection ds on ds.DevSectionId = dst.DevSectionId order by DevSectionSequence");
             //devsectionwithdevsubsectionid = (int)dt.Rows[0]["DevSectionId"];
         }
-        public static string SetLocalConnectionString(string conns)
-        {
-            connstring = conns;
-            using (SqlConnection conn = new SqlConnection(connstring))
-            {
-                conn.Open();
-            }
-            return connstring;
-        }
+
 
 //load by primary key
         private bizProfile LoadProfile(int Id)

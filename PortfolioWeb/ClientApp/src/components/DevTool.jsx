@@ -30,7 +30,7 @@ export function DevTool(props) {
 }
 function GetTool(t) {
     if (t.hasIcon) {
-        const imgpath = "/tool/" + t.devToolCode + ".svg";
+        const imgpath = "/tool/" + t.devToolCode + "." + t.iconExt;
         return (
                 <img src={imgpath} className="figure-img img-fluid rounded" width="40" />
         )

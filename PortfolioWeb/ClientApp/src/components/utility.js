@@ -59,13 +59,36 @@ export async function GetSQLScipt(fileurl) {
     sqlscript = FormatSQLHasHtml(sqlscript);
     return sqlscript;
 }
-
+export async function GetCodeScipt(fileurl, codetype) {
+    let codescript = await FetchFromFile(fileurl);
+    console.log("codetype", codetype);
+    switch (codetype) {
+        case "scriptsql":
+            codescript = FormatSQLHasHtml(codescript);
+            break;
+        case "scriptcsharp":
+            codescript = FormatCSharpHasHtml(codescript);
+    }
+    return codescript;
+}
 export async function FetchFromFile(fileurl) {
     const resp = await fetch(fileurl);
     let contents = await resp.text();
     return contents;
 }
+function DoFormatArray(wholevalue, classvalue, arrayvalue) {
+    arrayvalue.forEach(x => wholevalue = DoFormat(wholevalue, x, classvalue));
+    return wholevalue;
+}
 
+function DoFormat(wholevalue, findvalue, classvalue) {
+    return wholevalue.replaceAll(findvalue, "<span class=\"" + classvalue + "\">" + findvalue + "</span>")
+}
+
+function FormatCSharpHasHtml(code) {
+    code = code.replace(/(?:\r\n|\r|\n)/g, '<br>');
+    return DoFormatArray(code, "csharp", ["public class", "protected ", "private "]);
+}
 function FormatSQLHasHtml(sql) {
     let s = sql.toString();
     s = s.replace(/(?:\r\n|\r|\n)/g, '<br>');
@@ -80,9 +103,8 @@ function FormatSQLHasHtml(sql) {
     s = s.replace(/ int/g, "<span class=\"sql\"> int</span>");
     s = s.replace(/varchar/g, "<span class=\"sql\">varchar</span>");
     s = s.replace(/create database/g, "<span class=\"sql\">create database</span>");
-    s = s.replace(/create table/g, "<span class=\"sql\">create table</span>");
-    s = s.replace(/primary key/g, "<span class=\"sql\">primary key</span>");
-    s = s.replace(/identity/g, "<span class=\"sql\">identity</span>");
+    s = DoFormatArray(s, "sql", ["create table", "primary key", "identity"])
+
     s = s.replace(/foreign key references/g, "<span class=\"sql\">foreign key references</span>");
     s = s.replace(/datetime/g, "<span class=\"sql\">datetime</span>");
     s = s.replace(/date /g, "<span class=\"sql\">date </span>");

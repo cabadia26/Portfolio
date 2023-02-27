@@ -20,11 +20,28 @@ a {
   background-color: #1b6ec2;
   border-color: #1861ac;
 }*/
+.devsubsectionactive {
+    text-decoration: underline;
+    font-weight: bold;
+}
 .devtoolheader{
     min-width:135px;
     max-width:135px;
     font-family:Consolas;
 }
+.devtoolitem {
+    width: 100px;
+    text-align: center
+}
+
+.devtoolcard {
+    height: 100px;
+}
+
+.csharp {
+    color: blue;
+}
+
 .sql {
     color: blue;
 }

@@ -14,6 +14,7 @@ namespace PortfolioBizObjects
 
         }
         public int DevToolTypeId { get => this.PrimaryKeyValue; set => this.PrimaryKeyValue = value; }
+        public string DevToolTypeCode { get; set; } = "";
         public string DevToolTypeName { get; set; } = "";
         public int DevToolTypeSequence { get; set; }
         public bool ShowOnHomePage { get; set; }

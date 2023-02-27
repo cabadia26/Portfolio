@@ -3,6 +3,7 @@ import { Navbar, NavItem, NavLink, TabPane, TabContent } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { GetDevSubsectionElements } from './utility';
 import { SQLScript } from './SQLScript';
+import { CodeScript } from './CodeScript';
 import { DevTool } from './DevTool';
 import { TrySQL } from './TrySQL';
 
@@ -51,7 +52,8 @@ export function DevSubsection(props) {
                 <Navbar className="navbar-expand-sm">
                     <ul className="navbar-nav">
                         {subelements.map(e =>
-                            <NavItem key={e.devSubsectionElementCode} tag={Link} to="" className="btn btn-primary mx-1"
+                            <NavItem key={e.devSubsectionElementCode} tag={Link} to="" className={"btn mx-1 " + (activetab == e.devSubsectionElementSequence ? "btn-primary" : "btn-info")}
+
                                 onClick={() => setActiveTab(e.devSubsectionElementSequence)}>{e.buttonText}</NavItem>
                         )}
                     </ul>
@@ -73,8 +75,6 @@ export function DevSubsection(props) {
 }
 function GetSubElement(e) {
     const fileurl = "/" + e.devSubsectionElementCode + "/" + e.devSubsectionCode + e.fileExtension;
-
-    console.log("e",e);
 
     switch (e.htmlTag) {
         case "img":

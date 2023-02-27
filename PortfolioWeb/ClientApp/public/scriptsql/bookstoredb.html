@@ -1,0 +1,93 @@
+﻿ use BookstoreDb
+ go
+
+drop table if exists ShelfBook
+drop table if exists ShelfGenre
+drop table if exists BookGenre
+drop table if exists Shelf
+drop table if exists Genre
+drop table if exists Book
+drop table if exists Author
+drop table if exists Bookstore
+
+create table dbo.Bookstore(
+	BookstoreId int not null identity primary key,
+	BookstoreName varchar(150) not null
+		constraint ck_Bookstore_BookstoreName_cannot_be_blank check(BookstoreName <> ''),
+	BookstoreCode int not null
+--AS This last constraint is multi column constraint so you need a comma after the past constraint.
+		constraint ck_Bookstore_BookstoreCode_must_be_greater_than_zero check(BookstoreCode > 0)
+		constraint u_Bookstore_BookstoreCode_must_be_unique unique(BookstoreName, BookstoreCode)
+)
+go
+
+create table dbo.Author(
+	AuthorId int not null identity primary key,
+	FirstName varchar(35) not null
+		constraint ck_Author_FirstName_cannot_be_blank check(FirstName <> ''),
+    LastName varchar(35) not null
+		constraint ck_Author_Lastname_cannot_be_blank check(LastName <> ''),
+constraint u_Author_FirstName_and_LastName unique(FirstName, LastName)
+)
+go
+
+create table dbo.Genre(
+	GenreId int not null identity primary key,
+	Genre varchar(20) not null
+		constraint u_Genre_Genre unique
+		constraint ck_Genre_Genre_cannot_be_blank check(Genre <> '')
+)
+go
+
+create table dbo.Book(
+	BookId int not null identity primary key,
+	AuthorId int not null
+		constraint f_Book_Author foreign key references Author(AuthorID),
+	Title varchar(150) not null
+		constraint ck_Book_Title_cannot_be_blank check(Title <> ''),
+	YearPublished int not null
+		constraint ck_Book_YearPublished_must_be_between_zero_and_getdate check(YearPublished between 0 and getdate()),
+	ISBN uniqueidentifier not null
+		constraint d_Book_ISBN default newId()
+		constraint u_Book_ISBN_must_be_unique unique,
+constraint u_Book_Author_and_Title unique(AuthorID,Title)
+)
+go
+
+create table dbo.Shelf(
+	ShelfId int not null identity primary key,
+	BookstoreId int not null
+		constraint f_Shelf_Bookstore foreign key references Bookstore(BookstoreId),
+	ShelfSeq int not null
+		constraint ck_Shelf_ShelfSeq_must_greater_than_zero check(ShelfSeq > 0),
+	constraint u_Shelf_ShelfSeq_Bookstore unique(BookstoreId, ShelfId)
+)
+go
+
+create table dbo.ShelfGenre(
+	ShelfGenreId int not null identity primary key,
+	ShelfId int not null
+		constraint f_ShelfGenre_Shelf foreign key references Shelf(ShelfId),
+	GenreId int not null
+		constraint f_ShelfGenre_Genre foreign key references Genre(GenreId)
+)
+go
+
+create table dbo.ShelfBook(
+	ShelfBookId int not null identity primary key,
+	ShelfId int not null
+		constraint f_ShelfBook_Shelf foreign key references Shelf(ShelfId),
+	BookId int not null
+		constraint f_ShelfBook_Book foreign key references Book(BookId),
+	Quantity int not null
+		constraint ck_ShelfBook_must_be_greater_than_zero check(Quantity > 0)
+)
+go
+create table dbo.BookGenre(
+	BookGenreId int not null identity primary key,
+	BookID int not null
+		constraint f_BookGenre_Book foreign key references Book(BookId),
+	GenreId int not null
+		constraint f_BookGenre_Genre foreign key references Genre(GenreId)
+)
+go
