@@ -73,6 +73,7 @@ export function DevSubsection(props) {
         </div >
     )
 }
+
 function GetSubElement(e) {
     const fileurl = "/" + e.devSubsectionElementCode + "/" + e.devSubsectionCode + e.fileExtension;
 
@@ -102,13 +103,13 @@ function GetSubElement(e) {
             break;
         case "a":
             return (
-                <a href= {e.url}target='_new'>Click here to see website</a>
-                )
+                <a href={e.url} target='_new'>Click here to see website</a>
+            )
             break;
         case "trysql":
             return (
-                <TrySQL key={e.devSubsectionCode} dbname={e.devSubsectionCode }/>
-                )
+                <TrySQL key={e.devSubsectionCode} dbname={e.devSubsectionCode} />
+            )
             break;
     }
 }

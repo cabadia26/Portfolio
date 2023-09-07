@@ -1,5 +1,4 @@
-﻿
-const baseurl = "/profile/";
+﻿const baseurl = "/profile/";
 
 export async function GetProfile() {
     const p = await FetchFromAPI("")
@@ -13,7 +12,7 @@ export async function GetDevSections() {
 
 export async function GetDevSubsections() {
     const d = await FetchFromAPI("devsubsections")
-    console.log("GetDevSubsections",d);
+    console.log("GetDevSubsections", d);
     return d;
 }
 
@@ -31,35 +30,32 @@ export async function GetDevTools(DevSubsectionCode) {
     return t;
 }
 
-export async function GetDevToolType() {
+export async function GetDevToolTypes() {
     const t = await FetchFromAPI("devtooltypes")
     return t;
 }
-
 //devsubsectionqueries
 export async function GetDevSubsectionQueries() {
     return await FetchFromAPI("devsubsectionqueries")
-     
+
 }
 
 export async function GetDataTable(dbname, sql) {
-    
+
     const t = await FetchFromAPI("trysql?dbname=" + dbname + "&sql=" + sql)
     return t;
 }
-
 async function FetchFromAPI(apiurl) {
     const resp = await fetch(baseurl + apiurl);
     const json_array = await resp.json();
     return json_array;
 }
-
 export async function GetSQLScipt(fileurl) {
     let sqlscript = await FetchFromFile(fileurl);
     sqlscript = FormatSQLHasHtml(sqlscript);
     return sqlscript;
 }
-export async function GetCodeScipt(fileurl, codetype) {
+export async function GetCodeScript(fileurl, codetype) {
     let codescript = await FetchFromFile(fileurl);
     console.log("codetype", codetype);
     switch (codetype) {
@@ -71,6 +67,7 @@ export async function GetCodeScipt(fileurl, codetype) {
     }
     return codescript;
 }
+
 export async function FetchFromFile(fileurl) {
     const resp = await fetch(fileurl);
     let contents = await resp.text();

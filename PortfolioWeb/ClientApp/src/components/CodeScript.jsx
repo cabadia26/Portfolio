@@ -1,5 +1,5 @@
 ﻿import React, { useState, useEffect } from 'react';
-import { GetCodeScipt } from './utility';
+import { GetCodeScript } from './utility';
 
 export function CodeScript(props) {
     const [filecontents, setFilecontents] = useState("");
@@ -9,14 +9,14 @@ export function CodeScript(props) {
         (
             async () => {
 
-                const filecontentsval = await GetCodeScipt(fileurl, elementcode);
+                const filecontentsval = await GetCodeScript(fileurl, elementcode);
                 setFilecontents(filecontentsval);
             }
         )();
     }, [fileurl]);
 
-    if (filecontents == "") return <p>Loading...</p>;
-    console.log(filecontents)
+    if (filecontents == "") return <p>Loading...</p>
+    console.log(filecontents);
 
     return (
         <div className="code" dangerouslySetInnerHTML={{ __html: filecontents }} />
