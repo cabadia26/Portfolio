@@ -101,7 +101,7 @@ function GetSubElement(e) {
                 </div>
             )
             break;
-        case "a":
+        case "web":
             return (
                 <a href={e.url} target='_new'>Click here to see website</a>
             )

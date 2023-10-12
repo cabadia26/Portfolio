@@ -36,7 +36,6 @@
 
   <ItemGroup>
     <Folder Include="ClientApp\public\dbschema\NewFolder\" />
-    <Folder Include="ClientApp\public\wireframe\" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

@@ -1,0 +1,49 @@
+﻿Tic Tac Toe
+
+Overview
+This document describes requirements for the software implementation of the classic game of Tic Tac Toe. This software will allow two players to play against each other or for one player to play against the computer. A description of the game plus the requirements of this implementation are provided below.
+
+The game
+Two players are presented with a 3x3 grid of empty spots.
+The players take turns marking an empty spot with their letter: the first player to move is X and the second player is O. The first player to fill a winning set, defined as a row, column, or diagonal line of three spots, wins. If all spots are filled and neither player has a winning set, then the game results in a tie.
+
+
+Software implementation
+UI elements
+The software will present the Tic Tac Toe game with the UI elements listed below.
+3x3 Grid of buttons
+Row of buttons on top of the screen (like a toolbar) that has:
+Option buttons to choose between 2 Player or Play Against the Computer
+Start button
+Label to display Game Status message
+
+
+Player modes
+There are two modes of play – (1) Two player and (2) Play against the computer – as described below.
+
+Two player
+In this mode, as you would expect, each user clicks an empty button and their letter is displayed on the button.
+
+Play against the computer
+In this mode, the computer is letter O. After X’s turn the computer will make its move with an algorithm that follows the steps below sequentially:
+Offense: If there is a winning spot, then take it.
+Defense: If the other player can win, then take spot to block the win.
+
+
+Take the spot with the highest rank. The ranks are:
+Center button
+Any corner
+Any available button chosen randomly
+
+
+
+
+Game Process and Rules
+The game starts when the player clicks Start. Until then all clicks on the spot buttons are ignored, and the game status message is “Click Start to begin Game.”
+After Start is clicked: The message “Current Turn: X” is displayed. X takes turn by clicking on an empty spot button, and the clicked spot displays the player’s letter.
+Then, the current turn changes to “O,” which is reflected in the game status message and when the player clicks. If a player clicks a spot that is already taken, the click is ignored, with no effect to the spot or current turn.
+When there is a winner: The back color of all winning spots changes to a different color to indicate a win. Game status displays “Winner is: ” followed by the winning letter.
+If all spots are filled but there is no winner (tie): The back color of all buttons changes to a color that indicates no winner. Game status displays “Tie.”
+In the game state of Win or Tie all spot button clicks should be ignored. Do not disable the buttons because that will cause them to look faded out.
+If the user clicks Start in middle of a game, then the game should interrupt and begin a new game.
+

@@ -56,7 +56,7 @@ namespace PortfolioWeb.Controllers
             return bizDevToolType.GetAll();
         }
         [HttpGet("devtoolsforsubsection")]
-        public List<bizDevTool> DevToolGetForSubsection(string DevSubsectionCode)
+        public List<bizDevTool> DevSubsectionToolGet(string DevSubsectionCode)
         {
 
             List<bizDevTool> lst = bizDevTool.GetList("DevSubsectionCode", DevSubsectionCode);

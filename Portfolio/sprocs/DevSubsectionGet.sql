@@ -16,6 +16,7 @@ ds.DevSubsectionCode,
 ds.DevSubsectionName, 
 ds.DevSubsectionDesc, 
 GitHubRepoName = concat((select top 1 p.GitHubAccount from Profile p),('/'), ds.GitHubRepoName), 
+ds.URL,
 ds.DevSubsectionSequence
 from DevSubsection ds
 join DevSection d 
